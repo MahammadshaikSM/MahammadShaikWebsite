@@ -1,4 +1,4 @@
-# 👨‍💻 Moh — Senior Workday Integration Consultant
+# 👨‍💻 Mahammad Shaik — Senior Workday Integration Consultant
 
 > Personal portfolio website showcasing 6+ years of enterprise Workday consulting experience across Deloitte, IBM, and Accenture.
 
@@ -88,6 +88,6 @@ Served as Application Development Analyst leading Workday HCM and Financial impl
 
 Open to **Senior Workday Analyst** and **Senior Integration Consultant** roles — full-time or contract.
 
-- 💼 [LinkedIn](https://linkedin.com/in/your-profile) ← update this
-- 📧 your@email.com ← update this
+- 💼 [LinkedIn](https://www.linkedin.com/in/mahammad-shaik-5b422b11a/)
+- 📧 Smmahammadshaik@gmail.com
 - 🌐 [Portfolio](https://MahammadshaikSM.github.io)
