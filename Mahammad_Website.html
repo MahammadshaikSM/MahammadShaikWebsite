@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moh — Senior Workday Integration Consultant</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabinet+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0c;
+  --surface: #141414;
+  --surface2: #1c1c1c;
+  --border: #2a2a2a;
+  --text: #f0f0f0;
+  --muted: #888;
+  --orange: #ff6b2b;
+  --yellow: #ffd60a;
+  --cyan: #00d4ff;
+  --green: #39ff14;
+  --pink: #ff2d78;
+  --display: 'Bebas Neue', cursive;
+  --body: 'Cabinet Grotesk', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--orange);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 40px; height: 40px;
+  border: 1px solid var(--orange);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  mix-blend-mode: difference;
+}
+
+/* Nav */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(12,12,12,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--orange); }
+
+/* Hero */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(255,107,43,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,212,255,0.08) 0%, transparent 50%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,107,43,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,43,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(255,107,43,0.1);
+  border: 1px solid rgba(255,107,43,0.3);
+  color: var(--orange);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 6px 14px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.hero-name {
+  font-family: var(--display);
+  font-size: clamp(5rem, 12vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s 0.1s ease forwards;
+  opacity: 0;
+}
+
+.hero-name .accent { color: var(--orange); }
+.hero-name .outline {
+  -webkit-text-stroke: 2px var(--text);
+  color: transparent;
+}
+
+.hero-title {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s 0.2s ease forwards;
+  opacity: 0;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-title span { color: var(--cyan); }
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: #0c0c0c;
+  padding: 14px 32px;
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  cursor: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.btn-primary:hover { background: var(--yellow); transform: translateY(-2px); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  padding: 14px 32px;
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  cursor: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+
+.hero-stats {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeUp 0.6s 0.4s ease forwards;
+  opacity: 0;
+}
+
+.stat-item {
+  text-align: right;
+  border-right: 2px solid var(--orange);
+  padding-right: 16px;
+}
+
+.stat-num {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  color: var(--orange);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: var(--mono);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Section styles */
+section {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--orange);
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  margin-bottom: 60px;
+  letter-spacing: 0.02em;
+}
+
+/* About */
+#about {
+  border-top: 1px solid var(--border);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-text p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.about-text p span { color: var(--text); font-weight: 700; }
+
+.about-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.highlight-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  padding: 20px 24px;
+  transition: all 0.2s;
+}
+
+.highlight-card:nth-child(2) { border-left-color: var(--cyan); }
+.highlight-card:nth-child(3) { border-left-color: var(--yellow); }
+.highlight-card:nth-child(4) { border-left-color: var(--green); }
+
+.highlight-card:hover { background: var(--surface2); transform: translateX(4px); }
+
+.highlight-num {
+  font-family: var(--display);
+  font-size: 2rem;
+  color: var(--orange);
+  line-height: 1;
+}
+
+.highlight-card:nth-child(2) .highlight-num { color: var(--cyan); }
+.highlight-card:nth-child(3) .highlight-num { color: var(--yellow); }
+.highlight-card:nth-child(4) .highlight-num { color: var(--green); }
+
+.highlight-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: 0.03em;
+}
+
+/* Experience */
+#experience { border-top: 1px solid var(--border); }
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.exp-item::before {
+  content: '';
+  position: absolute;
+  left: 200px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.exp-date {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding-top: 6px;
+  letter-spacing: 0.05em;
+}
+
+.exp-company {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.exp-role {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.03em;
+}
+
+.exp-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exp-bullets li {
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.exp-bullets li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--orange);
+  font-size: 0.7rem;
+}
+
+/* Skills */
+#skills { border-top: 1px solid var(--border); }
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2px;
+}
+
+.skill-category {
+  background: var(--surface);
+  padding: 32px;
+  transition: background 0.2s;
+}
+
+.skill-category:hover { background: var(--surface2); }
+
+.skill-cat-title {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.72rem;
+  padding: 6px 12px;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+  transition: all 0.15s;
+}
+
+.skill-tag:hover { border-color: var(--orange); color: var(--orange); }
+
+/* Certifications */
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.cert-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.cert-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+}
+
+.cert-card:hover { border-color: var(--orange); transform: translateY(-4px); }
+
+.cert-icon { font-size: 2rem; margin-bottom: 12px; }
+
+.cert-name {
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.cert-issuer {
+  font-size: 0.72rem;
+  color: var(--orange);
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+}
+
+/* Blog */
+#blog { border-top: 1px solid var(--border); }
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2px;
+}
+
+.blog-card {
+  background: var(--surface);
+  padding: 32px;
+  transition: all 0.2s;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-card::after {
+  content: '→';
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  color: var(--orange);
+  font-size: 1.2rem;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.blog-card:hover { background: var(--surface2); }
+.blog-card:hover::after { opacity: 1; }
+
+.blog-tag {
+  display: inline-block;
+  background: rgba(255,107,43,0.1);
+  color: var(--orange);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  padding: 4px 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.blog-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.blog-excerpt {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.blog-date {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+/* Contact */
+#contact {
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.contact-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-tagline {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.form-input, .form-textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 0.85rem;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.form-input:focus, .form-textarea:focus { border-color: var(--orange); }
+.form-textarea { min-height: 120px; resize: vertical; }
+
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.contact-link:hover { color: var(--orange); }
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax layers */
+.parallax-layer {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Floating geometric shapes */
+.geo-shape {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0.06;
+  will-change: transform;
+  z-index: 0;
+}
+
+.geo-shape.circle {
+  border-radius: 50%;
+  border: 1px solid var(--orange);
+}
+
+.geo-shape.square {
+  border: 1px solid var(--cyan);
+  transform-origin: center;
+}
+
+.geo-shape.triangle {
+  width: 0; height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 70px solid var(--yellow);
+  background: transparent;
+  border-top: none;
+}
+
+/* Parallax section headers */
+.parallax-title {
+  will-change: transform;
+  display: inline-block;
+}
+
+/* Horizontal scrolling text on parallax */
+.parallax-text-bg {
+  position: absolute;
+  font-family: var(--display);
+  font-size: 18vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,107,43,0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
+  letter-spacing: 0.05em;
+  z-index: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+}
+
+/* Section position relative for parallax bg text */
+#about, #experience, #skills, #blog, #contact {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Parallax image depth cards */
+.exp-item, .cert-card, .highlight-card, .blog-card {
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.2s, border-color 0.2s;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow), var(--cyan));
+  z-index: 200;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Hero parallax orbs */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0.15;
+}
+
+.hero-orb-1 {
+  width: 500px; height: 500px;
+  background: var(--orange);
+  top: -100px; right: -100px;
+}
+
+.hero-orb-2 {
+  width: 300px; height: 300px;
+  background: var(--cyan);
+  bottom: -50px; left: 10%;
+}
+
+.hero-orb-3 {
+  width: 200px; height: 200px;
+  background: var(--yellow);
+  top: 40%; left: 30%;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  #hero { padding: 100px 20px 60px; }
+  .hero-stats { display: none; }
+  section { padding: 60px 20px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .exp-item { grid-template-columns: 1fr; gap: 8px; }
+  .exp-item::before { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+
+/* Marquee */
+.marquee-wrap {
+  background: var(--orange);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-item {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: #0c0c0c;
+  letter-spacing: 0.1em;
+  padding: 0 32px;
+}
+
+.marquee-dot {
+  color: rgba(12,12,12,0.4);
+  margin: 0 8px;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Floating geometric shapes -->
+<div class="geo-shape circle" id="geo1" style="width:120px;height:120px;top:20%;left:5%;"></div>
+<div class="geo-shape circle" id="geo2" style="width:60px;height:60px;top:60%;right:8%;"></div>
+<div class="geo-shape square" id="geo3" style="width:80px;height:80px;top:40%;left:88%;"></div>
+<div class="geo-shape square" id="geo4" style="width:40px;height:40px;top:75%;left:3%;"></div>
+<div class="geo-shape triangle" id="geo5" style="top:85%;right:15%;opacity:0.04;"></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">MOH.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1" id="heroOrb1"></div>
+  <div class="hero-orb hero-orb-2" id="heroOrb2"></div>
+  <div class="hero-orb hero-orb-3" id="heroOrb3"></div>
+  <div class="parallax-text-bg" id="heroBgText">WORKDAY</div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for new opportunities</div>
+    <h1 class="hero-name">
+      <span class="accent">MOH</span><br>
+      <span class="outline">WORKDAY</span><br>
+      <span>EXPERT.</span>
+    </h1>
+    <p class="hero-title">
+      Senior Workday Integration Consultant at <span>Deloitte</span> —
+      6+ years delivering enterprise-scale HCM & Finance integrations
+      for organizations with 80,000+ employees.
+    </p>
+    <div class="hero-ctas">
+      <a href="#experience" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">70+</div>
+      <div class="stat-label">Integrations Built</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">300+</div>
+      <div class="stat-label">Migrations Managed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">6+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Certifications</div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Workday Studio <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">EIB <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Core Connectors <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">RAAS <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">SOAP API <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">BIRT <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Workday Extend <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Orchestration <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">XML & XSLT <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Python <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">PeopleSoft Migration <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Prism Analytics <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Workday Studio <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">EIB <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Core Connectors <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">RAAS <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">SOAP API <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">BIRT <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Workday Extend <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Orchestration <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">XML & XSLT <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Python <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">PeopleSoft Migration <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Prism Analytics <span class="marquee-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="parallax-text-bg" id="aboutBgText">ABOUT</div>
+  <div class="section-label">About Me</div>
+  <h2 class="section-title">WHO I AM.</h2>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>
+        Senior Workday Integration Consultant at <span>Deloitte</span>, specializing in end-to-end Workday HCM and Finance integration design, development, and deployment for enterprise-scale public sector organizations.
+      </p>
+      <p>
+        With <span>6+ years</span> of hands-on Workday experience across three major firms — Deloitte, IBM, and Accenture — I bring deep technical expertise in Studio, EIB, Core Connectors, RAAS, SOAP APIs, Workday Orchestration, Workday Extend, and BIRT reporting.
+      </p>
+      <p>
+        Proven track record leading <span>PeopleSoft-to-Workday migrations</span>, managing 300+ integration migrations across tenant environments, and coordinating 20+ external vendors simultaneously — all with 100% on-time delivery and zero critical go-live defects.
+      </p>
+      <p>
+        Beyond delivery, passionate about <span>knowledge sharing</span> — built a firm-wide Integration Control Document library that reduced developer effort by 30%, and trained 30–40 analysts per session on Workday reporting and BIRT.
+      </p>
+    </div>
+    <div class="about-highlights">
+      <div class="highlight-card">
+        <div class="highlight-num">80,000+</div>
+        <div class="highlight-desc">Employees supported at current Deloitte client</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">300+</div>
+        <div class="highlight-desc">Integration migrations coordinated across tenants</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">30%</div>
+        <div class="highlight-desc">Developer time saved via ICD solution library</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">100%</div>
+        <div class="highlight-desc">On-time delivery across all client engagements</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="parallax-text-bg" id="expBgText">CAREER</div>
+  <div class="section-label">Career</div>
+  <h2 class="section-title">EXPERIENCE.</h2>
+
+  <div class="exp-item reveal">
+    <div class="exp-date">Jun 2024<br>— Feb 2026</div>
+    <div>
+      <div class="exp-company">DELOITTE</div>
+      <div class="exp-role">Workday Integration & Reporting Consultant</div>
+      <ul class="exp-bullets">
+        <li>Served as Workday Integration SME across HCM, Finance, Time & Absence, and Benefits for a public sector client with 80,000+ employees</li>
+        <li>Led end-to-end PeopleSoft-to-Workday migration — managing data conversion, integration redesign, and parallel testing with zero data loss</li>
+        <li>Designed and maintained 70+ integrations using Studio, EIB, Core Connectors, and RAAS; coordinated 300+ integration migrations across tenant environments</li>
+        <li>Managed development and testing with 20+ external vendors simultaneously, achieving 100% on-time delivery</li>
+        <li>Built 40+ custom reports, 200+ calculated fields, and leveraged 20+ SOAP services alongside Python scripting</li>
+        <li>Established firm-wide Integration Control Document library — reducing developer effort by 30%</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-date">Jan 2022<br>— Jul 2022</div>
+    <div>
+      <div class="exp-company" style="color:var(--cyan)">IBM</div>
+      <div class="exp-role">Workday Consultant</div>
+      <ul class="exp-bullets">
+        <li>Delivered 30+ Workday integrations across 3 concurrent client engagements, each supporting 40,000+ employees — 120,000+ total workforce</li>
+        <li>Managed 100+ production support tickets across ServiceNow, Jira, and Microsoft Dynamics 365 with zero compliance breaches</li>
+        <li>Enforced secure integration patterns, data governance, and audit-ready documentation including Exception Audit and DART frameworks</li>
+        <li>⭐ Pioneered firm-wide Workday Integration Solution Library — reducing developer time by 30% across project teams</li>
+        <li>⭐ Recognized as internal Workday trainer for Report Writing, BIRT, and Studio — delivering sessions to 30–40 developers per session</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-date">Jan 2019<br>— Jan 2022</div>
+    <div>
+      <div class="exp-company" style="color:var(--yellow)">ACCENTURE</div>
+      <div class="exp-role">Application Development Analyst</div>
+      <ul class="exp-bullets">
+        <li>Led Workday HCM & Financial module implementations for Fortune 500 clients with 100,000+ employees across manufacturing and financial services</li>
+        <li>Built custom integrations using Core Connectors, EIB, and Workday Studio — zero deployment errors across all client environments</li>
+        <li>Designed and deployed 120+ Workday dashboards and BIRT layouts used by 500+ managers and HR leads with multilingual support</li>
+        <li>Built custom reports and calculated fields across HCM, Compensation, Payroll, Talent, and Finance modules</li>
+        <li>Delivered Workday Report Writing training to groups of 30–40 analysts and HR professionals per session</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-label">Expertise</div>
+  <h2 class="section-title">SKILLS.</h2>
+
+  <div class="skills-grid reveal">
+    <div class="skill-category">
+      <div class="skill-cat-title">Integration Tools</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Workday Studio</span>
+        <span class="skill-tag">EIB</span>
+        <span class="skill-tag">Core Connectors</span>
+        <span class="skill-tag">RAAS</span>
+        <span class="skill-tag">SOAP API</span>
+        <span class="skill-tag">REST API</span>
+        <span class="skill-tag">Orchestration</span>
+        <span class="skill-tag">Workday Extend</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title">Workday Modules</div>
+      <div class="skill-tags">
+        <span class="skill-tag">HCM Core</span>
+        <span class="skill-tag">Finance</span>
+        <span class="skill-tag">Payroll</span>
+        <span class="skill-tag">Benefits</span>
+        <span class="skill-tag">Time & Absence</span>
+        <span class="skill-tag">Recruiting</span>
+        <span class="skill-tag">Talent</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title">Reporting & Analytics</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Report Writer</span>
+        <span class="skill-tag">BIRT</span>
+        <span class="skill-tag">Prism Analytics</span>
+        <span class="skill-tag">Calculated Fields</span>
+        <span class="skill-tag">Dashboards</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title">Technical</div>
+      <div class="skill-tags">
+        <span class="skill-tag">XML</span>
+        <span class="skill-tag">XSLT</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">JSON</span>
+        <span class="skill-tag">CSV/Excel</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title">Project & Delivery</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SIT / UAT / EUAT</span>
+        <span class="skill-tag">Hypercare</span>
+        <span class="skill-tag">Tenant Migration</span>
+        <span class="skill-tag">Agile / Scrum</span>
+        <span class="skill-tag">JIRA</span>
+        <span class="skill-tag">ServiceNow</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title">Compliance & Security</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Security Groups</span>
+        <span class="skill-tag">SOX Compliance</span>
+        <span class="skill-tag">DART</span>
+        <span class="skill-tag">Audit Readiness</span>
+        <span class="skill-tag">Data Governance</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certifications -->
+  <div class="section-label" style="margin-top:60px">Certified</div>
+  <div class="certs-grid reveal">
+    <div class="cert-card">
+      <div class="cert-icon">🏆</div>
+      <div class="cert-name">Workday Integrations</div>
+      <div class="cert-issuer">Workday Certified</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📊</div>
+      <div class="cert-name">Workday Report Writer</div>
+      <div class="cert-issuer">Workday Certified</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📋</div>
+      <div class="cert-name">Workday BIRT</div>
+      <div class="cert-issuer">Workday Certified</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">⚙️</div>
+      <div class="cert-name">Workday Orchestrate</div>
+      <div class="cert-issuer">Workday Certified</div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog -->
+<section id="blog">
+  <div class="section-label">Insights</div>
+  <h2 class="section-title">ARTICLES.</h2>
+  <div class="blog-grid reveal">
+    <div class="blog-card">
+      <div class="blog-tag">Workday</div>
+      <div class="blog-title">PeopleSoft to Workday: Lessons from an 80,000-Employee Migration</div>
+      <div class="blog-excerpt">Key decisions, challenges, and best practices from leading a full-scale HCM system migration for a large public sector organization.</div>
+      <div class="blog-date">Coming Soon</div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-tag">Integration</div>
+      <div class="blog-title">Building a Workday Integration Control Document Library That Actually Gets Used</div>
+      <div class="blog-excerpt">How standardizing ICD documentation across project teams reduced developer effort by 30% and became a firm-wide knowledge asset.</div>
+      <div class="blog-date">Coming Soon</div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-tag">Tips</div>
+      <div class="blog-title">Managing 20+ Vendors in a Workday Implementation Without Losing Your Mind</div>
+      <div class="blog-excerpt">Practical strategies for vendor coordination, testing alignment, and delivery governance across large-scale Workday deployments.</div>
+      <div class="blog-date">Coming Soon</div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-label">Let's Talk</div>
+  <h2 class="section-title">CONTACT.</h2>
+  <div class="contact-inner">
+    <p class="contact-tagline reveal">
+      Open to full-time roles, contract engagements, and consulting opportunities
+      in Workday integration and HCM. Let's build something great together.
+    </p>
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input class="form-input" type="text" placeholder="Your Name" required>
+        <input class="form-input" type="email" placeholder="Your Email" required>
+      </div>
+      <input class="form-input" type="text" placeholder="Subject">
+      <textarea class="form-textarea" placeholder="Your message..."></textarea>
+      <button type="submit" class="btn-primary" style="align-self:flex-start; border:none; cursor:none;">Send Message</button>
+    </form>
+    <div class="contact-links reveal">
+      <a href="https://linkedin.com/in/moh" target="_blank" class="contact-link">
+        <span>⟶</span> LinkedIn
+      </a>
+      <a href="https://github.com/MahammadshaikSM" target="_blank" class="contact-link">
+        <span>⟶</span> GitHub
+      </a>
+      <a href="/cdn-cgi/l/email-protection#fa979592ba9f979b9396d4999597" class="contact-link">
+        <span>⟶</span> Email
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 MOH — SENIOR WORKDAY CONSULTANT</span>
+  <span>BUILT WITH PASSION · DELOITTE · IBM · ACCENTURE</span>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx - 20 + 'px';
+  ring.style.top = ry - 20 + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .blog-card, .cert-card, .highlight-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2)';
+    ring.style.transform = 'scale(1.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    ring.style.transform = 'scale(1)';
+  });
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+
+// =====================
+// PARALLAX ENGINE
+// =====================
+const scrollProgress = document.getElementById('scrollProgress');
+
+// Parallax config: [element, speed multiplier, axis]
+// speed > 0 = moves down with scroll (slower than page = parallax)
+// speed < 0 = moves up (opposite direction)
+const parallaxItems = [
+  // Hero orbs - gentle drift
+  { el: document.getElementById('heroOrb1'), speedY: -0.3, speedX: 0 },
+  { el: document.getElementById('heroOrb2'), speedY: -0.2, speedX: 0.05 },
+  { el: document.getElementById('heroOrb3'), speedY: -0.15, speedX: -0.05 },
+
+  // Hero background text - slow horizontal drift
+  { el: document.getElementById('heroBgText'), speedY: -0.4, speedX: 0.15 },
+
+  // About bg text
+  { el: document.getElementById('aboutBgText'), speedY: -0.25, speedX: -0.1 },
+
+  // Experience bg text
+  { el: document.getElementById('expBgText'), speedY: -0.2, speedX: 0.12 },
+
+  // Floating geometric shapes - each at different speeds
+  { el: document.getElementById('geo1'), speedY: -0.15, speedX: 0.05, rotate: 0.03 },
+  { el: document.getElementById('geo2'), speedY: -0.25, speedX: -0.08, rotate: -0.05 },
+  { el: document.getElementById('geo3'), speedY: -0.1, speedX: 0.03, rotate: 0.08 },
+  { el: document.getElementById('geo4'), speedY: -0.35, speedX: 0.1, rotate: -0.04 },
+  { el: document.getElementById('geo5'), speedY: -0.18, speedX: -0.06, rotate: 0.06 },
+];
+
+// Section cards - staggered depth effect on scroll
+const expItems = document.querySelectorAll('.exp-item');
+const certCards = document.querySelectorAll('.cert-card');
+const blogCards = document.querySelectorAll('.blog-card');
+const highlightCards = document.querySelectorAll('.highlight-card');
+
+let lastScrollY = window.scrollY;
+let ticking = false;
+let rotations = {};
+
+function onScroll() {
+  const scrollY = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+
+  // Scroll progress bar
+  scrollProgress.style.width = (scrollY / docH * 100) + '%';
+
+  // Parallax elements
+  parallaxItems.forEach((item, i) => {
+    if (!item.el) return;
+    const ty = scrollY * item.speedY;
+    const tx = scrollY * (item.speedX || 0);
+    if (item.rotate) {
+      rotations[i] = (rotations[i] || 0) + item.rotate;
+      item.el.style.transform = `translate(${tx}px, ${ty}px) rotate(${rotations[i]}deg)`;
+    } else {
+      item.el.style.transform = `translate(${tx}px, ${ty}px)`;
+    }
+  });
+
+  // Cards subtle parallax depth — closer items move slightly more
+  expItems.forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    const center = window.innerHeight / 2;
+    const dist = (rect.top + rect.height / 2 - center) / window.innerHeight;
+    el.style.transform = `translateY(${dist * -12}px)`;
+  });
+
+  certCards.forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    const center = window.innerHeight / 2;
+    const dist = (rect.top + rect.height / 2 - center) / window.innerHeight;
+    el.style.transform = `translateY(${dist * -8}px)`;
+  });
+
+  blogCards.forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    const center = window.innerHeight / 2;
+    const dist = (rect.top + rect.height / 2 - center) / window.innerHeight;
+    el.style.transform = `translateY(${dist * -10}px)`;
+  });
+
+  highlightCards.forEach((el, i) => {
+    const rect = el.getBoundingClientRect();
+    const center = window.innerHeight / 2;
+    const dist = (rect.top + rect.height / 2 - center) / window.innerHeight;
+    el.style.transform = `translateX(${dist * -6}px)`;
+  });
+
+  // Hero content parallax — text lifts as you scroll
+  const heroContent = document.querySelector('.hero-content');
+  const heroStats = document.querySelector('.hero-stats');
+  const heroTag = document.querySelector('.hero-tag');
+  if (heroContent) heroContent.style.transform = `translateY(${scrollY * 0.25}px)`;
+  if (heroStats) heroStats.style.transform = `translateY(${scrollY * 0.15}px)`;
+  if (heroTag) heroTag.style.transform = `translateY(${scrollY * 0.35}px)`;
+
+  // Hero grid — faster parallax
+  const heroGrid = document.querySelector('.hero-grid');
+  if (heroGrid) heroGrid.style.transform = `translateY(${scrollY * 0.5}px)`;
+
+  lastScrollY = scrollY;
+  ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(onScroll);
+    ticking = true;
+  }
+}, { passive: true });
+
+// Mouse parallax on hero — subtle tilt based on mouse position
+const hero = document.getElementById('hero');
+hero.addEventListener('mousemove', e => {
+  const rect = hero.getBoundingClientRect();
+  const cx = (e.clientX - rect.left) / rect.width - 0.5;
+  const cy = (e.clientY - rect.top) / rect.height - 0.5;
+
+  const orb1 = document.getElementById('heroOrb1');
+  const orb2 = document.getElementById('heroOrb2');
+  const orb3 = document.getElementById('heroOrb3');
+
+  if (orb1) orb1.style.transform = `translate(${cx * 40}px, ${cy * 40}px)`;
+  if (orb2) orb2.style.transform = `translate(${cx * -30}px, ${cy * -30}px)`;
+  if (orb3) orb3.style.transform = `translate(${cx * 20}px, ${cy * -20}px)`;
+});
+
+// 3D tilt on skill tags on hover
+document.querySelectorAll('.skill-category').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(600px) rotateX(${y * -6}deg) rotateY(${x * 6}deg) translateZ(4px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateZ(0)';
+    card.style.transition = 'transform 0.4s ease';
+  });
+});
+
+// 3D tilt on cert cards
+document.querySelectorAll('.cert-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(400px) rotateX(${y * -10}deg) rotateY(${x * 10}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(400px) rotateX(0) rotateY(0) translateY(0)';
+    card.style.transition = 'transform 0.4s ease';
+  });
+});
+
+// Contact form
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = '#39ff14';
+  setTimeout(() => {
+    btn.textContent = 'Send Message';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
+
+// Initial call
+onScroll();
+</script>
