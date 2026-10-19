@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moh · Ember</title>
+<meta name="description" content="Shaik Mahammad (Moh), Workday Integration & Reporting Consultant at Deloitte. Ember theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/base.css">
+<style>
+  :root {
+    --bg: #0A0A0A; --bg-2: #121212; --fg: #F4F1EC; --fg-2: #A8A39B;
+    --accent: #FF5B1F; --on-accent: #0A0A0A; --line: #FFFFFF1A; --glow: #FF5B1F30;
+    --display: Archivo, system-ui, sans-serif; --display-weight: 800; --display-stretch: 125%; --display-case: uppercase; --display-track: -0.02em;
+    --body: Archivo, system-ui, sans-serif; --mono: "JetBrains Mono", monospace; --radius: 26px;
+    --up: #3DDC84; --down: #FF6B6B;
+  }
+  .xcard { background: linear-gradient(160deg, #161616, #0d0d0d); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript><p style="padding:24px">Shaik Mahammad · Workday Integration Consultant · <a href="mailto:Mohammadshaik345@gmail.com">Mohammadshaik345@gmail.com</a></p></noscript>
+
+<script src="../assets/content.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+window.VARIANT = {
+  id: "ember", name: "Ember", logo: "MOH",
+  claim: "Integration,<br><em>engineered.</em>",
+  sceneLabel: "A black and orange card engraved with Moh, Workday Integration, which flips as you scroll",
+  headings: {
+    impact: "Built for scale.<br><em>Shipped on time.</em>",
+    experience: "Six years.<br><em>Three firms.</em>",
+    secure: "Secure<br><em>by design.</em>",
+    stack: "The full<br><em>Workday stack.</em>",
+    ventures: "Next:<br><em>markets.</em>",
+    contact: "Let's build<br><em>something.</em>",
+  },
+  updown: { green: ["#3DDC84", "#FF6B6B"], red: ["#FF6B6B", "#3DDC84"], blue: ["#5AB0FF", "#FFA94D"], mono: ["#F4F1EC", "#A8A39B"] },
+
+  // 3D card that flips with scroll
+  scene(canvas, { RM }) {
+    const S = window.SITE;
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.outputEncoding = THREE.sRGBEncoding;
+    const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(35, 1, .1, 100); camera.position.set(0, 0, 9);
+    const W = 3.4, H = 2.14, R = .16, sh = new THREE.Shape();
+    sh.moveTo(-W/2+R,-H/2); sh.lineTo(W/2-R,-H/2); sh.quadraticCurveTo(W/2,-H/2,W/2,-H/2+R); sh.lineTo(W/2,H/2-R); sh.quadraticCurveTo(W/2,H/2,W/2-R,H/2);
+    sh.lineTo(-W/2+R,H/2); sh.quadraticCurveTo(-W/2,H/2,-W/2,H/2-R); sh.lineTo(-W/2,-H/2+R); sh.quadraticCurveTo(-W/2,-H/2,-W/2+R,-H/2);
+    const body = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: .04, bevelEnabled: true, bevelThickness: .02, bevelSize: .02, bevelSegments: 4 }),
+      new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: .9, roughness: .35 }));
+    body.geometry.translate(0, 0, -.02);
+    const font = (w, s) => `${w} ${s}px Archivo, Arial, sans-serif`;
+    const face = (draw) => {
+      const c = document.createElement("canvas"); c.width = 1360; c.height = 856; const g = c.getContext("2d");
+      g.beginPath(); g.roundRect ? g.roundRect(0, 0, c.width, c.height, 64) : g.rect(0, 0, c.width, c.height); g.clip();
+      const paint = () => { g.save(); g.clearRect(0, 0, c.width, c.height); draw(g, c.width, c.height); g.restore(); };
+      paint();
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 8;
+      document.fonts.ready.then(() => { paint(); t.needsUpdate = true; });
+      return new THREE.MeshStandardMaterial({ map: t, transparent: true, metalness: .55, roughness: .38 });
+    };
+    const front = new THREE.Mesh(new THREE.PlaneGeometry(W, H), face((g, w, h) => {
+      const grd = g.createLinearGradient(0, 0, w, h); grd.addColorStop(0, "#1f1f1f"); grd.addColorStop(1, "#090909");
+      g.fillStyle = grd; g.fillRect(0, 0, w, h); g.fillStyle = "#FF5B1F"; g.fillRect(0, h - 24, w, 24);
+      g.fillStyle = "#F4F1EC"; g.font = font(900, 150); g.fillText("MOH", 80, 220); g.fillStyle = "#FF5B1F"; g.fillText(".", 80 + g.measureText("MOH").width, 220);
+      g.fillStyle = "#C9A46A"; g.fillRect(80, 330, 170, 128); g.strokeStyle = "#8a6d3d"; g.lineWidth = 4;
+      [[80,394,250,394],[165,330,165,458]].forEach(([a,b,c2,d]) => { g.beginPath(); g.moveTo(a,b); g.lineTo(c2,d); g.stroke(); });
+      g.fillStyle = "#A8A39B"; g.font = font(500, 40); g.fillText("WORKDAY INTEGRATION", 80, 640);
+      g.fillStyle = "#F4F1EC"; g.font = font(700, 56); g.fillText("SHAIK MAHAMMAD", 80, 720);
+      g.fillStyle = "#FF5B1F"; g.font = font(800, 44); g.textAlign = "right"; g.fillText("DELOITTE", w - 80, 720);
+    }));
+    front.position.z = .046;
+    const back = new THREE.Mesh(new THREE.PlaneGeometry(W, H), face((g, w, h) => {
+      g.fillStyle = "#FF5B1F"; g.fillRect(0, 0, w, h); g.fillStyle = "#0A0A0A"; g.fillRect(0, 90, w, 120);
+      g.font = font(900, 120); g.fillText("70+", 80, 400); g.fillText("433", 520, 400); g.fillText("80K", 960, 400);
+      g.font = font(600, 34); g.fillText("INTEGRATIONS", 80, 450); g.fillText("MIGRATIONS", 520, 450); g.fillText("EMPLOYEES", 960, 450);
+      g.font = font(500, 34); S.certifications.forEach((c, i) => g.fillText("✓ " + c.toUpperCase(), 80 + (i % 2) * 620, 600 + Math.floor(i / 2) * 70));
+    }));
+    back.rotation.y = Math.PI; back.position.z = -.046;
+    const pivot = new THREE.Group(); pivot.add(body, front, back); scene.add(pivot);
+    scene.add(new THREE.AmbientLight(0xffffff, .55));
+    const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(3, 4, 6); scene.add(key);
+    const rim = new THREE.PointLight(0xff5b1f, 3, 20); rim.position.set(-4, -2, 3); scene.add(rim);
+    const st = { flip: 0, tx: 0, ty: 0, scale: 1 }; let mx = 0, my = 0, vis = true;
+    addEventListener("pointermove", (ev) => { mx = ev.clientX / innerWidth - .5; my = ev.clientY / innerHeight - .5; }, { passive: true });
+    new IntersectionObserver(([en]) => vis = en.isIntersecting).observe(canvas);
+    const size = () => { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); st.scale = w < 700 ? .6 : 1; };
+    size(); addEventListener("resize", size);
+    const t0 = performance.now();
+    const loop = (t) => {
+      requestAnimationFrame(loop); if (!vis) return;
+      const time = (t - t0) / 1000;
+      st.tx += ((RM ? 0 : my * .35) - st.tx) * .06; st.ty += ((RM ? 0 : mx * .5) - st.ty) * .06;
+      pivot.rotation.set(-.2 + st.tx, -.45 + st.ty + st.flip * Math.PI, RM ? 0 : Math.sin(time * .6) * .03);
+      pivot.position.y = .45 + st.flip * .3 + (RM ? 0 : Math.sin(time * .9) * .06);
+      pivot.scale.setScalar(st.scale); renderer.render(scene, camera);
+    };
+    requestAnimationFrame(loop);
+    return { setProgress(p) { st.flip = p; } };
+  },
+};
+</script>
+<script src="../assets/engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moh · Neon</title>
+<meta name="description" content="Shaik Mahammad (Moh), Workday Integration & Reporting Consultant at Deloitte. Neon theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/base.css">
+<style>
+  :root {
+    --bg: #000000; --bg-2: #0E0E0C; --fg: #F2F0EA; --fg-2: #A3A099;
+    --accent: #CCFF00; --on-accent: #000000; --line: #F2F0EA1A; --glow: #CCFF0018;
+    --display: "Instrument Serif", Georgia, serif; --display-weight: 400; --display-stretch: 100%; --display-case: none; --display-track: -0.02em; --em-style: italic;
+    --body: "Inter Tight", system-ui, sans-serif; --mono: "JetBrains Mono", monospace; --radius: 4px;
+    --up: #CCFF00; --down: #FF5C5C;
+  }
+  .hero h1 { font-size: clamp(48px, 10vw, 172px); line-height: .86; }
+  h2.display { font-size: clamp(48px, 8vw, 132px); line-height: .9; }
+  .xcard h3 { font-size: clamp(42px, 5vw, 76px); }
+  .logo { font-family: "Inter Tight", sans-serif; font-weight: 800; }
+  .xcard, .tile, .bx, .vcard, .app, .pr, .agent { border-radius: 4px; }
+  .btn, .chip, .navpill, .navpill a, .toast-ctl, .mini, .app select { border-radius: 4px; }
+  .toast { border-radius: 4px; }
+  .toast .ic { border-radius: 4px; }
+  .num b { font-family: var(--display); }
+  .bx.accent h3 { font-family: var(--display); font-size: 34px; font-weight: 400; }
+  .xcard li::before, .xcard .hl::before { background: var(--accent); }
+  .tile .ic { border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript><p style="padding:24px">Shaik Mahammad · Workday Integration Consultant · <a href="mailto:Mohammadshaik345@gmail.com">Mohammadshaik345@gmail.com</a></p></noscript>
+
+<script src="../assets/content.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+window.VARIANT = {
+  id: "neon", name: "Neon", logo: "Moh",
+  claim: "Calm systems.<br><em>Bright outcomes.</em>",
+  sceneLabel: "A glossy black egg on a pedestal with a neon ring, a still life suggesting steady returns",
+  headings: {
+    impact: "Quiet work.<br><em>Loud results.</em>",
+    experience: "Six years,<br><em>three firms.</em>",
+    secure: "Protection,<br><em>by default.</em>",
+    stack: "The whole<br><em>stack.</em>",
+    ventures: "Markets,<br><em>without the confetti.</em>",
+    contact: "Let's make<br><em>it simple.</em>",
+  },
+  updown: { green: ["#CCFF00", "#FF5C5C"], red: ["#FF5C5C", "#CCFF00"], blue: ["#5AB0FF", "#FFA94D"], mono: ["#F2F0EA", "#A3A099"] },
+
+  scene(canvas, { RM }) {
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
+
+    // simple studio environment so the egg has reflections
+    const envScene = new THREE.Scene();
+    envScene.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), new THREE.MeshBasicMaterial({ color: 0x111111, side: THREE.BackSide })));
+    const strip = (x, y, w, h, c) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.set(x, y, -6); m.lookAt(0, 0, 0); envScene.add(m); return m; };
+    strip(-5, 2, 2, 9, 0xffffff); strip(5, 1, 1.2, 9, 0xccff00); strip(0, 7, 12, 1.5, 0xffffff);
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(envScene, .04).texture;
+
+    const egg = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: .15, roughness: .08, clearcoat: 1, clearcoatRoughness: .05 }));
+    egg.scale.set(1, 1.28, 1); egg.position.y = 1.28;
+    const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.5, .5, 64), new THREE.MeshStandardMaterial({ color: 0x1a1a18, roughness: .6, metalness: .1 }));
+    pedestal.position.y = -.25;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.9, .025, 16, 160), new THREE.MeshBasicMaterial({ color: 0xccff00 }));
+    ring.rotation.x = Math.PI / 2; ring.position.y = 1.2;
+    const group = new THREE.Group(); group.add(egg, pedestal, ring); scene.add(group);
+    const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(-3, 5, 4); scene.add(key);
+    const lime = new THREE.PointLight(0xccff00, 4, 12); lime.position.set(3, 1.5, 2); scene.add(lime);
+    scene.add(new THREE.AmbientLight(0xffffff, .15));
+
+    let p = 0, mx = 0, my = 0, vis = true;
+    addEventListener("pointermove", (ev) => { mx = ev.clientX / innerWidth - .5; my = ev.clientY / innerHeight - .5; }, { passive: true });
+    new IntersectionObserver(([en]) => vis = en.isIntersecting).observe(canvas);
+    const size = () => {
+      const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      group.position.x = w > 900 ? 2.2 : 0; group.scale.setScalar(w < 700 ? .72 : 1);
+    };
+    size(); addEventListener("resize", size);
+    const t0 = performance.now();
+    const loop = (t) => {
+      requestAnimationFrame(loop); if (!vis) return;
+      const time = RM ? 0 : (t - t0) / 1000, ang = .25 + p * 1.4 + (RM ? 0 : mx * .3);
+      camera.position.set(Math.sin(ang) * 10, 2.6 + p * 2.2 - (RM ? 0 : my * .8), Math.cos(ang) * 10);
+      camera.lookAt(group.position.x * .6, 1.1, 0);
+      ring.position.y = 1.2 + Math.sin(time * 1.2) * .25 + p * 1.2;
+      ring.rotation.x = Math.PI / 2 + Math.sin(time * .7) * .12;
+      egg.rotation.y = time * .2;
+      lime.position.x = 3 * Math.cos(time * .6); lime.position.z = 3 * Math.sin(time * .6);
+      renderer.render(scene, camera);
+    };
+    requestAnimationFrame(loop);
+    return { setProgress(v) { p = v; } };
+  },
+};
+</script>
+<script src="../assets/engine.js"></script>
+</body>
+</html>
